@@ -55,6 +55,11 @@ def get_data_to_df():
     df['Interest_primary_proper'] = df['Interest_primary_proper'].replace(
         {'Your Area Of Interest': 'Other'})
 
+    df['exposure_score'] = df['exposure_score'].replace(
+        {'Exposure Pass': 'High Exposure',
+         'Exposure Fail': 'Low Exposure'
+         })
+
     return df.loc[df['Host Site'].astype(str) != "nan"]
 
 
@@ -134,7 +139,7 @@ exposure = new_df['exposure_score'].value_counts().reset_index().sort_index().re
     columns={'index': 'Exposure', 'exposure_score': 'Number of Members'}
 )
 
-exposure_order = ['Exposure Pass', 'Exposure Fail']
+exposure_order = ['Low Exposure', 'High Exposure']
 
 exposure['Exposure'] = pd.Categorical(exposure['Exposure'], [
     x for x in exposure_order if x in exposure['Exposure'].unique().tolist()], ordered=True)
