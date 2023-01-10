@@ -52,6 +52,9 @@ def get_data_to_df():
         '8.0': "Master's Degree or PhD",
     })
 
+    df['Interest_primary_proper'] = df['Interest_primary_proper'].replace(
+        {'Your Area Of Interest': 'Other'})
+
     return df.loc[df['Host Site'].astype(str) != "nan"]
 
 
@@ -127,6 +130,20 @@ edu_df = edulevel.sort_values(by='Education Level')
 figure_edulevel = px.bar(edu_df, x='Education Level',
                          y='Number of Members', color='Education Level')
 
+exposure = new_df['exposure_score'].value_counts().reset_index().sort_index().rename(
+    columns={'index': 'Exposure', 'exposure_score': 'Number of Members'}
+)
+
+exposure_order = ['Exposure Pass', 'Exposure Fail']
+
+exposure['Exposure'] = pd.Categorical(exposure['Exposure'], [
+    x for x in exposure_order if x in exposure['Exposure'].unique().tolist()], ordered=True)
+
+exposure_df = exposure.sort_values(by='Exposure')
+
+figure_exposure = px.bar(exposure_df, x='Exposure',
+                         y='Number of Members', color='Exposure')
+
 
 # st.dataframe(new_df)
 
@@ -157,10 +174,6 @@ with colb:
 st.markdown("### Industry Interest Distribution")
 st.plotly_chart(figure_interest, use_container_width=True)
 
-
-st.markdown("#### Salary Expectations")
-st.plotly_chart(figure_salary, use_container_width=True)
-
 colx, coly = st.columns(2)
 
 with colx:
@@ -170,3 +183,13 @@ with colx:
 with coly:
     st.markdown("#### Next Career Goal")
     st.plotly_chart(figure_careergoal, use_container_width=True)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("#### Salary Expectations")
+    st.plotly_chart(figure_salary, use_container_width=True)
+
+with col2:
+    st.markdown('### Exposure to Industries')
+    st.plotly_chart(figure_exposure, use_container_width=True)
