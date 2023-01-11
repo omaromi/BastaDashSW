@@ -184,6 +184,7 @@ colx, coly = st.columns(2)
 with colx:
     st.markdown("#### Education Level")
     st.plotly_chart(figure_edulevel, use_container_width=True)
+    st.markdown("The above counts completed + enrolled i.e. Bachelor's degree refers to those who have a BS and those currently in a BS program.")
 
 with coly:
     st.markdown("#### Next Career Goal")
